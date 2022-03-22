@@ -69,35 +69,22 @@ namespace Selenium_Script
             IWebElement challengeBox = sitedriver.FindElement(By.Id("Challenge"));
             IWebElement challengeFinal = sitedriver.FindElement(By.Id("Code"));
             IWebElement challengeSubmit = sitedriver.FindElement(By.Id("submitchallenge"));
-            Actions actionsSite = new Actions(sitedriver);
             challengeBox.Click();
             //Select all then copy the challenge code
             ControlPlus(challengeBox, "a");
 
             ControlPlus(challengeBox, "c");
 
-            //Launch Control and copy the code
-            GetControlCode(testSite);
+            IJavaScriptExecutor js = (IJavaScriptExecutor)sitedriver;
 
-            //Move back to Main Site Challenge Page and paste in final code
-            ControlPlus(challengeFinal, "v");
+            js.ExecuteScript("new_tab = window.open('https://control.interactgo.com/Account/Login')");
+            sitedriver.SwitchTo().Window(sitedriver.WindowHandles.Last());
 
-            challengeSubmit.Click();
-        }
+            WebDriverWait wait = new WebDriverWait(sitedriver, TimeSpan.FromSeconds(10));
 
-        public static void GetControlCode(bool testSite)
-        {
-            //Control Site (start with maximized window)
-            ChromeOptions options = new ChromeOptions();
-            options.AddArgument("--start-maximized");
-            IWebDriver controlDriver = new ChromeDriver(options);
-            WebDriverWait wait = new WebDriverWait(controlDriver, TimeSpan.FromSeconds(10));
-            controlDriver.Navigate().GoToUrl("https://control.interactgo.com/Account/Login"); //Open in new tab instead of window, it will be quicker
-
-            //Control Site Main Login Elements
-            IWebElement controlUser = controlDriver.FindElement(By.Id("Email"));
-            IWebElement controlPassword = controlDriver.FindElement(By.Id("Password"));
-            IWebElement controlLoginBtn = controlDriver.FindElement(By.CssSelector(".btn-primary"));
+            IWebElement controlUser = sitedriver.FindElement(By.Id("Email"));
+            IWebElement controlPassword = sitedriver.FindElement(By.Id("Password"));
+            IWebElement controlLoginBtn = sitedriver.FindElement(By.CssSelector(".btn-primary"));
 
             //Control Site Main Interactions
             controlUser.SendKeys("james.clark@interact-intranet.com");
@@ -106,15 +93,15 @@ namespace Selenium_Script
 
 
             //Control Challenge Page Elements
-            IWebElement controlCodeBox = controlDriver.FindElement(By.CssSelector(".challenge-code"));
-            IWebElement controlCodeReason = controlDriver.FindElement(By.CssSelector(".challenge-reason"));
-            IWebElement controlCodeSubmit = controlDriver.FindElement(By.CssSelector(".challenge-submit"));
+            IWebElement controlCodeBox = sitedriver.FindElement(By.CssSelector(".challenge-code"));
+            IWebElement controlCodeReason = sitedriver.FindElement(By.CssSelector(".challenge-reason"));
+            IWebElement controlCodeSubmit = sitedriver.FindElement(By.CssSelector(".challenge-submit"));
 
             //Control Challenge Page Interactions
 
             //Paste challenge code
             ControlPlus(controlCodeBox, "v");
-            
+
             if (testSite == false)
             {
                 wait.Until(ExpectedConditions.ElementToBeClickable(controlCodeReason));
@@ -132,7 +119,18 @@ namespace Selenium_Script
 
             //Copy the final code and close the Control window
             ControlPlus(controlCodeBox, "c");
-            controlDriver.Quit();
+
+            sitedriver.SwitchTo().Window(sitedriver.WindowHandles.First());
+            js.ExecuteScript("new_tab.close()");
+            
+
+            //Launch Control and copy the code
+            //GetControlCode(testSite, sitedriver);
+
+            //Move back to Main Site Challenge Page and paste in final code
+            ControlPlus(challengeFinal, "v");
+
+            challengeSubmit.Click();
         }
         public static void ControlPlus(IWebElement element, string key)
         {
