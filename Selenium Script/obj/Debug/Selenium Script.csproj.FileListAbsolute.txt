@@ -1,0 +1,21 @@
+C:\Users\James Clark\source\repos\Selenium Script\Selenium Script\bin\Debug\Selenium Script.exe.config
+C:\Users\James Clark\source\repos\Selenium Script\Selenium Script\bin\Debug\Selenium Script.exe
+C:\Users\James Clark\source\repos\Selenium Script\Selenium Script\bin\Debug\Selenium Script.pdb
+C:\Users\James Clark\source\repos\Selenium Script\Selenium Script\bin\Debug\WebDriver.dll
+C:\Users\James Clark\source\repos\Selenium Script\Selenium Script\obj\Debug\Selenium Script.csproj.AssemblyReference.cache
+C:\Users\James Clark\source\repos\Selenium Script\Selenium Script\obj\Debug\Selenium Script.csproj.SuggestedBindingRedirects.cache
+C:\Users\James Clark\source\repos\Selenium Script\Selenium Script\obj\Debug\Selenium Script.csproj.CoreCompileInputs.cache
+C:\Users\James Clark\source\repos\Selenium Script\Selenium Script\obj\Debug\Selenium Script.csproj.CopyComplete
+C:\Users\James Clark\source\repos\Selenium Script\Selenium Script\obj\Debug\Selenium Script.exe
+C:\Users\James Clark\source\repos\Selenium Script\Selenium Script\obj\Debug\Selenium Script.pdb
+C:\DEV\Selenium Script\Selenium Script\bin\Debug\Selenium Script.exe.config
+C:\DEV\Selenium Script\Selenium Script\bin\Debug\Selenium Script.exe
+C:\DEV\Selenium Script\Selenium Script\bin\Debug\Selenium Script.pdb
+C:\DEV\Selenium Script\Selenium Script\bin\Debug\WebDriver.dll
+C:\DEV\Selenium Script\Selenium Script\obj\Debug\Selenium Script.csproj.AssemblyReference.cache
+C:\DEV\Selenium Script\Selenium Script\obj\Debug\Selenium Script.csproj.SuggestedBindingRedirects.cache
+C:\DEV\Selenium Script\Selenium Script\obj\Debug\Selenium Script.csproj.CoreCompileInputs.cache
+C:\DEV\Selenium Script\Selenium Script\obj\Debug\Selenium Script.csproj.CopyComplete
+C:\DEV\Selenium Script\Selenium Script\obj\Debug\Selenium Script.exe
+C:\DEV\Selenium Script\Selenium Script\obj\Debug\Selenium Script.pdb
+C:\DEV\Selenium Script\Selenium Script\bin\Debug\SeleniumExtras.WaitHelpers.dll
