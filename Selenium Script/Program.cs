@@ -18,7 +18,7 @@ namespace Selenium_Script
         static void Main(string[] args)
         {
             Console.WriteLine("Enter Site URL to login to:");
-            string siteUrl = Console.ReadLine();
+            string siteUrl = Console.ReadLine().Trim();
             bool hasLogin = siteUrl.Contains("login");
             bool hasHttps = siteUrl.Contains("http");
             bool testSite = false;
