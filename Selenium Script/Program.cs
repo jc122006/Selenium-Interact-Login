@@ -137,10 +137,30 @@ namespace Selenium_Script
             js.ExecuteScript("window.open('" + loggedInURL + "Interact/Pages/Admin/People/Staff/Default.aspx?section=106')");
             js.ExecuteScript("window.open('" + loggedInURL + "InteractV7/UMI/List')");
             sitedriver.SwitchTo().Window(sitedriver.WindowHandles.First());
+
+            while (isBrowserClosed(sitedriver) == false)
+            {
+                Thread.Sleep(60000);
+            }
+            sitedriver.Quit();
         }
         public static void ControlPlus(IWebElement element, string key)
         {
             element.SendKeys(Keys.LeftControl + key); //passes in the element to be targeted, then pass in the key to use with control
+        }
+        public static bool isBrowserClosed(IWebDriver driver)
+        {
+            bool isClosed = false;
+            try
+            {
+                string currentURLTest = driver.Url;
+            }
+            catch (Exception e)
+            {
+                isClosed = true;
+            }
+
+            return isClosed;
         }
     }
 }
