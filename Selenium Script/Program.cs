@@ -131,6 +131,12 @@ namespace Selenium_Script
             ControlPlus(challengeFinal, "v");
 
             challengeSubmit.Click();
+            string loggedInURL = sitedriver.Url;
+            js.ExecuteScript("window.open('" + loggedInURL + "support')");
+            js.ExecuteScript("window.open('" + loggedInURL + "Interact/Pages/Admin/Default.aspx?section=-1')");
+            js.ExecuteScript("window.open('" + loggedInURL + "Interact/Pages/Admin/People/Staff/Default.aspx?section=106')");
+            js.ExecuteScript("window.open('" + loggedInURL + "InteractV7/UMI/List')");
+            sitedriver.SwitchTo().Window(sitedriver.WindowHandles.First());
         }
         public static void ControlPlus(IWebElement element, string key)
         {
