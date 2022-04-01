@@ -17,11 +17,25 @@ namespace Selenium_Script
     {
         static void Main(string[] args)
         {
+            bool run = true;
+
+            while (run)
+            {
+                LoginToSite();
+            }            
+        }
+        public static void ControlPlus(IWebElement element, string key)
+        {
+            element.SendKeys(Keys.LeftControl + key); //passes in the element to be targeted, then pass in the key to use with control
+        }       
+        public static void LoginToSite()
+        {
             Console.WriteLine("Enter Site URL to login to:");
             string siteUrl = Console.ReadLine().Trim();
             bool hasLogin = siteUrl.Contains("login");
             bool hasHttps = siteUrl.Contains("http");
             bool testSite = false;
+
 
             if (hasLogin == false)
             {
@@ -46,8 +60,13 @@ namespace Selenium_Script
             //string testSite = "N";
 
             ChromeOptions options = new ChromeOptions();
+            //options.AddArguments("--start-maximized", "--blink-settings=imagesEnabled=false");
             options.AddArgument("--start-maximized");
-            IWebDriver sitedriver = new ChromeDriver(options);
+            var chromeDriverService = ChromeDriverService.CreateDefaultService();
+            chromeDriverService.HideCommandPromptWindow = true; 
+
+
+            IWebDriver sitedriver = new ChromeDriver(chromeDriverService, options);
 
             sitedriver.Navigate().GoToUrl(siteUrl);
             //sitedriver.Navigate().GoToUrl("https://thehub.integralads.com/login?local=True");
@@ -122,7 +141,7 @@ namespace Selenium_Script
 
             sitedriver.SwitchTo().Window(sitedriver.WindowHandles.First());
             js.ExecuteScript("new_tab.close()");
-            
+
 
             //Launch Control and copy the code
             //GetControlCode(testSite, sitedriver);
@@ -138,29 +157,8 @@ namespace Selenium_Script
             js.ExecuteScript("window.open('" + loggedInURL + "InteractV7/UMI/List')");
             sitedriver.SwitchTo().Window(sitedriver.WindowHandles.First());
 
-            while (isBrowserClosed(sitedriver) == false)
-            {
-                Thread.Sleep(60000);
-            }
-            sitedriver.Quit();
-        }
-        public static void ControlPlus(IWebElement element, string key)
-        {
-            element.SendKeys(Keys.LeftControl + key); //passes in the element to be targeted, then pass in the key to use with control
-        }
-        public static bool isBrowserClosed(IWebDriver driver)
-        {
-            bool isClosed = false;
-            try
-            {
-                string currentURLTest = driver.Url;
-            }
-            catch (Exception e)
-            {
-                isClosed = true;
-            }
+            Console.WriteLine("Finished logging into " + loggedInURL);
 
-            return isClosed;
         }
     }
 }
