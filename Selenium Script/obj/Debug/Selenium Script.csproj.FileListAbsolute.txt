@@ -30,3 +30,7 @@ C:\Git\Selenium-Interact-Login\Selenium Script\obj\Debug\Selenium Script.csproj.
 C:\Git\Selenium-Interact-Login\Selenium Script\obj\Debug\Selenium Script.csproj.CopyComplete
 C:\Git\Selenium-Interact-Login\Selenium Script\obj\Debug\Selenium Script.exe
 C:\Git\Selenium-Interact-Login\Selenium Script\obj\Debug\Selenium Script.pdb
+C:\Git\Selenium-Interact-Login\Selenium Script\bin\Debug\Selenium Script.exe.manifest
+C:\Git\Selenium-Interact-Login\Selenium Script\bin\Debug\Selenium Script.application
+C:\Git\Selenium-Interact-Login\Selenium Script\obj\Debug\Selenium Script.exe.manifest
+C:\Git\Selenium-Interact-Login\Selenium Script\obj\Debug\Selenium Script.application
