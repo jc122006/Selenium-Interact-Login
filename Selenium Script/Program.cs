@@ -35,7 +35,6 @@ namespace Selenium_Script
             bool hasLogin = siteUrl.Contains("login");
             bool hasHttps = siteUrl.Contains("http");
             bool testSite = false;
-            string controlReason = "";
 
 
             if (hasLogin == false)
@@ -53,11 +52,6 @@ namespace Selenium_Script
             if (testSites.Any(siteUrl.Contains))
             {
                 testSite = true;
-            }
-            else
-            {
-                Console.WriteLine("Ticket Number/Reason: ");
-                controlReason = Console.ReadLine();
             }
 
             //want to add a dictionary of test sites that you'd be able to edit from a yaml file 
@@ -130,7 +124,7 @@ namespace Selenium_Script
             if (testSite == false)
             {
                 wait.Until(ExpectedConditions.ElementToBeClickable(controlCodeReason));
-                controlCodeReason.SendKeys("ticket: " + controlReason);
+                controlCodeReason.SendKeys("ticket");
                 controlCodeSubmit.Click();
                 Thread.Sleep(1500);
             }
@@ -163,7 +157,7 @@ namespace Selenium_Script
             js.ExecuteScript("window.open('" + loggedInURL + "InteractV7/UMI/List')");
             sitedriver.SwitchTo().Window(sitedriver.WindowHandles.First());
 
-            Console.WriteLine("Finished logging into " + loggedInURL + "\n");
+            Console.WriteLine("Finished logging into " + loggedInURL);
 
         }
     }
