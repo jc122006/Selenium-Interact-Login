@@ -37,15 +37,35 @@ namespace Selenium_Script
             bool testSite = false;
             string controlReason = "";
 
+            IDictionary<string, string> shorthandSites = new Dictionary<string, string>();
+            shorthandSites.Add("kirk", "https://kirk.interactgo.com/login?local=True");
+            shorthandSites.Add("picard", "https://picard.interactgo.com/login?local=True");
 
-            if (hasLogin == false)
+            bool isShorthand = shorthandSites.ContainsKey(siteUrl); //Checks to see if the user input is a registered shorthand term.
+
+
+            if (!isShorthand)
             {
-                siteUrl += "/login?local=True";
+                // the key isn't in the dictionary. i.e. The user input is not a registered shorthand.
+                if (hasLogin == false)
+                {
+                    //The word 'Login' was not detected, add the end of the URL.
+                    siteUrl += "/login?local=True";
+                }
+                if (hasHttps == false)
+                {
+                    //https was not found on the user input, add it.
+                    siteUrl = "https://" + siteUrl;
+                }
+                
             }
-            if (hasHttps == false)
+            else
             {
-                siteUrl = "https://" + siteUrl;
+                //key was found in dictionary. i.e. The user input is a registered shorthand.
+                shorthandSites.TryGetValue(siteUrl, out siteUrl);
             }
+
+            
 
             Console.WriteLine("Logging into " + siteUrl);
 
@@ -59,6 +79,8 @@ namespace Selenium_Script
                 Console.WriteLine("Ticket Number/Reason: ");
                 controlReason = Console.ReadLine();
             }
+
+            
 
             //want to add a dictionary of test sites that you'd be able to edit from a yaml file 
             //Add a way that you can add /support, application settings or something similar to end
