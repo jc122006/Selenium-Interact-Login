@@ -65,9 +65,11 @@ namespace Selenium_Script
                 shorthandSites.TryGetValue(siteUrl, out siteUrl);
             }
 
-            
 
-            Console.WriteLine("Logging into " + siteUrl);
+
+            Console.WriteLine("Launching browser... ");
+            var timer = new Stopwatch();
+            timer.Start();
 
             string[] testSites = { "kirk", "picard" };
             if (testSites.Any(siteUrl.Contains))
@@ -87,63 +89,67 @@ namespace Selenium_Script
             //Open multiple tabs with support and application settings
             //string testSite = "N";
 
-            ChromeOptions options = new ChromeOptions();
-            //options.AddArguments("--start-maximized", "--blink-settings=imagesEnabled=false");
-            options.AddArgument("--start-maximized");
+            ChromeOptions headlessOptions = new ChromeOptions();
+            headlessOptions.AddArguments("--start-maximized", "--blink-settings=imagesEnabled=false", "--headless");
             //options.AddArguments(@"user-data-dir=C:\Users\James Clark\AppData\Local\Google\Chrome\User Data\Selenium");
             var chromeDriverService = ChromeDriverService.CreateDefaultService();
             chromeDriverService.HideCommandPromptWindow = true; 
 
 
-            IWebDriver sitedriver = new ChromeDriver(chromeDriverService, options);
+            IWebDriver headlessDriver = new ChromeDriver(chromeDriverService, headlessOptions);
 
-            sitedriver.Navigate().GoToUrl(siteUrl);
-            //sitedriver.Navigate().GoToUrl("https://thehub.integralads.com/login?local=True");
-            //sitedriver.Navigate().GoToUrl("https://kirk.interactgo.com/login?local=True");
+            headlessDriver.Navigate().GoToUrl(siteUrl);
+            //headlessDriver.Navigate().GoToUrl("https://thehub.integralads.com/login?local=True");
+            //headlessDriver.Navigate().GoToUrl("https://kirk.interactgo.com/login?local=True");
+            TimeSpan elapsedTime = timer.Elapsed;
+            Console.WriteLine("Loading " + siteUrl + "... " + elapsedTime.ToString(@"m\:ss\.fff"));
 
             //Elements used for site main login page
-            IWebElement siteUser = sitedriver.FindElement(By.Id("Username"));
-            IWebElement sitePass = sitedriver.FindElement(By.Id("Password"));
-            IWebElement siteRM = sitedriver.FindElement(By.Id("RememberMe"));
-            IWebElement siteLoginBtn = sitedriver.FindElement(By.Id("loginbtn"));
+            IWebElement siteUser = headlessDriver.FindElement(By.Id("Username"));
+            IWebElement sitePass = headlessDriver.FindElement(By.Id("Password"));
+            IWebElement siteRM = headlessDriver.FindElement(By.Id("RememberMe"));
+            IWebElement siteLoginBtn = headlessDriver.FindElement(By.Id("loginbtn"));
 
             //Interactions with site main login page elements           
             siteUser.SendKeys("admin");
             sitePass.SendKeys("bantam");
             siteRM.Click();
             siteLoginBtn.Click();
+            elapsedTime = timer.Elapsed;
+            Console.WriteLine("Grabbing challenge code... " + elapsedTime.ToString(@"m\:ss\.fff"));
 
             //Challenge page Elements
-            IWebElement challengeBox = sitedriver.FindElement(By.Id("Challenge"));
-            IWebElement challengeFinal = sitedriver.FindElement(By.Id("Code"));
-            IWebElement challengeSubmit = sitedriver.FindElement(By.Id("submitchallenge"));
+            IWebElement challengeBox = headlessDriver.FindElement(By.Id("Challenge"));
+            IWebElement challengeFinal = headlessDriver.FindElement(By.Id("Code"));
+            IWebElement challengeSubmit = headlessDriver.FindElement(By.Id("submitchallenge"));
             challengeBox.Click();
             //Select all then copy the challenge code
             ControlPlus(challengeBox, "a");
 
             ControlPlus(challengeBox, "c");
 
-            IJavaScriptExecutor js = (IJavaScriptExecutor)sitedriver;
+            IJavaScriptExecutor js = (IJavaScriptExecutor)headlessDriver;
 
             js.ExecuteScript("new_tab = window.open('https://control.interactgo.com/Account/Login')");
-            sitedriver.SwitchTo().Window(sitedriver.WindowHandles.Last());
+            headlessDriver.SwitchTo().Window(headlessDriver.WindowHandles.Last());
 
-            WebDriverWait wait = new WebDriverWait(sitedriver, TimeSpan.FromSeconds(10));
+            WebDriverWait wait = new WebDriverWait(headlessDriver, TimeSpan.FromSeconds(10));
 
-            IWebElement controlUser = sitedriver.FindElement(By.Id("Email"));
-            IWebElement controlPassword = sitedriver.FindElement(By.Id("Password"));
-            IWebElement controlLoginBtn = sitedriver.FindElement(By.CssSelector(".btn-primary"));
+            IWebElement controlUser = headlessDriver.FindElement(By.Id("Email"));
+            IWebElement controlPassword = headlessDriver.FindElement(By.Id("Password"));
+            IWebElement controlLoginBtn = headlessDriver.FindElement(By.CssSelector(".btn-primary"));
 
             //Control Site Main Interactions
             controlUser.SendKeys("james.clark@interact-intranet.com");
             controlPassword.SendKeys("R3trieval.br!nk.0verst@te");
             controlLoginBtn.Click();
-
+            elapsedTime = timer.Elapsed;
+            Console.WriteLine("Logging into Control... " + elapsedTime.ToString(@"m\:ss\.fff"));
 
             //Control Challenge Page Elements
-            IWebElement controlCodeBox = sitedriver.FindElement(By.CssSelector(".challenge-code"));
-            IWebElement controlCodeReason = sitedriver.FindElement(By.CssSelector(".challenge-reason"));
-            IWebElement controlCodeSubmit = sitedriver.FindElement(By.CssSelector(".challenge-submit"));
+            IWebElement controlCodeBox = headlessDriver.FindElement(By.CssSelector(".challenge-code"));
+            IWebElement controlCodeReason = headlessDriver.FindElement(By.CssSelector(".challenge-reason"));
+            IWebElement controlCodeSubmit = headlessDriver.FindElement(By.CssSelector(".challenge-submit"));
 
             //Control Challenge Page Interactions
 
@@ -168,40 +174,47 @@ namespace Selenium_Script
             //Copy the final code and close the Control window
             ControlPlus(controlCodeBox, "c");
 
-            sitedriver.SwitchTo().Window(sitedriver.WindowHandles.First());
+            headlessDriver.SwitchTo().Window(headlessDriver.WindowHandles.First());
             js.ExecuteScript("new_tab.close()");
 
-
-            //Launch Control and copy the code
-            //GetControlCode(testSite, sitedriver);
+            elapsedTime = timer.Elapsed;
+            Console.WriteLine("Copied Control code..." + elapsedTime.ToString(@"m\:ss\.fff"));
 
             //Move back to Main Site Challenge Page and paste in final code
             ControlPlus(challengeFinal, "v");
 
+            elapsedTime = timer.Elapsed;
+            Console.WriteLine("Logging into " + siteUrl + "... " + elapsedTime.ToString(@"m\:ss\.fff"));
             challengeSubmit.Click();
-            string loggedInURL = sitedriver.Url;
-            js.ExecuteScript("window.open('" + loggedInURL + "support')");
-            js.ExecuteScript("window.open('" + loggedInURL + "Interact/Pages/Admin/Default.aspx?section=-1')");
-            js.ExecuteScript("window.open('" + loggedInURL + "Interact/Pages/Admin/People/Staff/Default.aspx?section=106')");
-            js.ExecuteScript("window.open('" + loggedInURL + "InteractV7/UMI/List')");
-            sitedriver.SwitchTo().Window(sitedriver.WindowHandles.First());
+            
+            string loggedInURL = headlessDriver.Url;
+            
 
-            Console.WriteLine("Finished logging into " + loggedInURL + "\n");
+            timer.Stop();
+            elapsedTime = timer.Elapsed;
+            Console.WriteLine("Finished logging into " + loggedInURL);
+            Console.WriteLine("Total login time: " + elapsedTime.ToString(@"m\:ss\.fff") + "\n");
 
-            //Cookie cookie = sitedriver.Manage().Cookies.GetCookieNamed(".AspNet.ApplicationCookie");
-            //System.Console.WriteLine(cookie);
+            Cookie cookie = headlessDriver.Manage().Cookies.GetCookieNamed(".AspNet.ApplicationCookie");
 
-            //IWebDriver sitedriver2 = new ChromeDriver(chromeDriverService, options);
-            //sitedriver2.Navigate().GoToUrl("https://kirk.interactgo.com/");
+            //Create visible web driver (still uses chromeDriverService from headless driver)
+            ChromeOptions siteOptions = new ChromeOptions();
+            siteOptions.AddArgument("--start-maximized");
+            IWebDriver siteDriver = new ChromeDriver(chromeDriverService, siteOptions);
 
-            //sitedriver2.Manage().Cookies.AddCookie(cookie);
+            siteDriver.Navigate().GoToUrl(loggedInURL);
 
-            //sitedriver2.Navigate().GoToUrl("https://kirk.interactgo.com/");
+            siteDriver.Manage().Cookies.AddCookie(cookie);
 
+            siteDriver.Navigate().GoToUrl(loggedInURL);
 
-
-            //var cookies = sitedriver.Manage().Cookies.AllCookies.ToString();
-            // Console.WriteLine(cookies);
+            //Open tabs
+            IJavaScriptExecutor jsSite = (IJavaScriptExecutor)siteDriver;
+            jsSite.ExecuteScript("window.open('" + loggedInURL + "support')");
+            jsSite.ExecuteScript("window.open('" + loggedInURL + "Interact/Pages/Admin/Default.aspx?section=-1')");
+            jsSite.ExecuteScript("window.open('" + loggedInURL + "Interact/Pages/Admin/People/Staff/Default.aspx?section=106')");
+            jsSite.ExecuteScript("window.open('" + loggedInURL + "InteractV7/UMI/List')");
+            siteDriver.SwitchTo().Window(siteDriver.WindowHandles.First());
 
 
         }
