@@ -90,6 +90,7 @@ namespace Selenium_Script
             ChromeOptions options = new ChromeOptions();
             //options.AddArguments("--start-maximized", "--blink-settings=imagesEnabled=false");
             options.AddArgument("--start-maximized");
+            //options.AddArguments(@"user-data-dir=C:\Users\James Clark\AppData\Local\Google\Chrome\User Data\Selenium");
             var chromeDriverService = ChromeDriverService.CreateDefaultService();
             chromeDriverService.HideCommandPromptWindow = true; 
 
@@ -186,6 +187,22 @@ namespace Selenium_Script
             sitedriver.SwitchTo().Window(sitedriver.WindowHandles.First());
 
             Console.WriteLine("Finished logging into " + loggedInURL + "\n");
+
+            //Cookie cookie = sitedriver.Manage().Cookies.GetCookieNamed(".AspNet.ApplicationCookie");
+            //System.Console.WriteLine(cookie);
+
+            //IWebDriver sitedriver2 = new ChromeDriver(chromeDriverService, options);
+            //sitedriver2.Navigate().GoToUrl("https://kirk.interactgo.com/");
+
+            //sitedriver2.Manage().Cookies.AddCookie(cookie);
+
+            //sitedriver2.Navigate().GoToUrl("https://kirk.interactgo.com/");
+
+
+
+            //var cookies = sitedriver.Manage().Cookies.AllCookies.ToString();
+            // Console.WriteLine(cookies);
+
 
         }
     }
