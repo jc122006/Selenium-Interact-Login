@@ -202,7 +202,7 @@ namespace Selenium_Script
             siteOptions.AddArgument("--start-maximized");
             IWebDriver siteDriver = new ChromeDriver(chromeDriverService, siteOptions);
 
-            siteDriver.Navigate().GoToUrl(loggedInURL);
+            siteDriver.Navigate().GoToUrl(siteUrl);
 
             siteDriver.Manage().Cookies.AddCookie(cookie);
 
