@@ -67,9 +67,7 @@ namespace Selenium_Script
 
 
 
-            Console.WriteLine("Launching browser... ");
-            var timer = new Stopwatch();
-            timer.Start();
+            
 
             string[] testSites = { "kirk", "picard" };
             if (testSites.Any(siteUrl.Contains))
@@ -82,7 +80,9 @@ namespace Selenium_Script
                 controlReason = Console.ReadLine();
             }
 
-            
+            Console.WriteLine("Launching browser... ");
+            var timer = new Stopwatch();
+            timer.Start();
 
             //want to add a dictionary of test sites that you'd be able to edit from a yaml file 
             //Add a way that you can add /support, application settings or something similar to end
