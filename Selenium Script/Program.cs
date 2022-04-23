@@ -107,13 +107,24 @@ namespace Selenium_Script
             //Elements used for site main login page
             IWebElement siteUser = headlessDriver.FindElement(By.Id("Username"));
             IWebElement sitePass = headlessDriver.FindElement(By.Id("Password"));
-            IWebElement siteRM = headlessDriver.FindElement(By.Id("RememberMe"));
+            
             IWebElement siteLoginBtn = headlessDriver.FindElement(By.Id("loginbtn"));
+
+            try
+            {
+                IWebElement siteRM = headlessDriver.FindElement(By.Id("RememberMe"));
+            }
+            catch (Exception NoSuchElementException)
+            {
+                Console.WriteLine("No 'Remember Me' checkbox found, cannot continue.");
+                headlessDriver.Quit();
+                return;
+            }
 
             //Interactions with site main login page elements           
             siteUser.SendKeys("admin");
             sitePass.SendKeys("bantam");
-            siteRM.Click();
+            //siteRM.Click();
             siteLoginBtn.Click();
             elapsedTime = timer.Elapsed;
             Console.WriteLine("Grabbing challenge code... " + elapsedTime.ToString(@"m\:ss\.fff"));
