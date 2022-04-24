@@ -84,6 +84,7 @@ namespace Selenium_Script
 
 
             IWebDriver headlessDriver = new ChromeDriver(chromeDriverService, headlessOptions);
+            WebDriverWait wait = new WebDriverWait(headlessDriver, TimeSpan.FromSeconds(10));
 
             headlessDriver.Navigate().GoToUrl(siteUrl);
             //headlessDriver.Navigate().GoToUrl("https://thehub.integralads.com/login?local=True");
@@ -92,28 +93,42 @@ namespace Selenium_Script
             Console.WriteLine("Loading " + siteUrl + "... " + elapsedTime.ToString(@"m\:ss\.fff"));
 
             //Elements used for site main login page
+
             IWebElement siteUser = headlessDriver.FindElement(By.Id("Username"));
+            IWebElement expandFields = null;
             IWebElement sitePass = headlessDriver.FindElement(By.Id("Password"));
 
             IWebElement siteLoginBtn = headlessDriver.FindElement(By.Id("loginbtn"));
+            IWebElement siteRM;
 
             try
             {
-                IWebElement siteRM = headlessDriver.FindElement(By.Id("RememberMe"));
+                siteRM = headlessDriver.FindElement(By.Id("RememberMe"));
             }
             catch (Exception NoSuchElementException)
             {
-                Console.WriteLine("No 'Remember Me' checkbox found, cannot continue.");
+                Console.WriteLine("No 'Remember Me' checkbox found, launching visible browser.");
                 headlessDriver.Quit();
                 VisibleLoginToSite(siteUrl, testSite, controlReason);
                 Cookie nullCookie = null;
                 return nullCookie;
             }
-
+            try
+            {
+                siteUser.SendKeys("admin");
+            }
+            catch (Exception ElementNotInteractableException)
+            {
+                Console.WriteLine("Unable to interact with Username field, expanding fields...");
+                expandFields = headlessDriver.FindElement(By.CssSelector(".collapsed"));
+                expandFields.Click();
+                wait.Until(ExpectedConditions.ElementToBeClickable(siteUser));
+                siteUser.SendKeys("admin");
+            }
             //Interactions with site main login page elements           
-            siteUser.SendKeys("admin");
+            
             sitePass.SendKeys("bantam");
-            //siteRM.Click();
+            siteRM.Click();
             siteLoginBtn.Click();
             elapsedTime = timer.Elapsed;
             Console.WriteLine("Grabbing challenge code... " + elapsedTime.ToString(@"m\:ss\.fff"));
@@ -122,7 +137,19 @@ namespace Selenium_Script
             IWebElement challengeBox = headlessDriver.FindElement(By.Id("Challenge"));
             IWebElement challengeFinal = headlessDriver.FindElement(By.Id("Code"));
             IWebElement challengeSubmit = headlessDriver.FindElement(By.Id("submitchallenge"));
-            challengeBox.Click();
+
+            if(expandFields != null)
+            {
+                expandFields = headlessDriver.FindElement(By.CssSelector(".collapsed"));
+                expandFields.Click();
+                wait.Until(ExpectedConditions.ElementToBeClickable(challengeBox));
+                challengeBox.Click();
+            }
+            else
+            {
+                challengeBox.Click();
+            }
+            
             //Select all then copy the challenge code
             ControlPlus(challengeBox, "a");
 
@@ -133,7 +160,7 @@ namespace Selenium_Script
             js.ExecuteScript("new_tab = window.open('https://control.interactgo.com/Account/Login')");
             headlessDriver.SwitchTo().Window(headlessDriver.WindowHandles.Last());
 
-            WebDriverWait wait = new WebDriverWait(headlessDriver, TimeSpan.FromSeconds(10));
+            
 
             IWebElement controlUser = headlessDriver.FindElement(By.Id("Email"));
             IWebElement controlPassword = headlessDriver.FindElement(By.Id("Password"));
