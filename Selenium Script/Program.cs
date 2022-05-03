@@ -82,8 +82,25 @@ namespace Selenium_Script
             var chromeDriverService = ChromeDriverService.CreateDefaultService();
             chromeDriverService.HideCommandPromptWindow = true;
 
-
+            try
+            {
+                IWebDriver testDriver = new ChromeDriver(chromeDriverService, headlessOptions);
+                testDriver.Quit();
+            }
+            catch (Exception InvalidOperationException)
+            {
+                Console.WriteLine("ERROR CANNOT CONTINUE \n");
+                Console.WriteLine("This application is out of date compared to your current Chrome Version. ");
+                Console.WriteLine("Please update to the latest NuGet Packages for Selenium.Webdriver and Selenium.WebDriver.Chrome.");
+                Console.WriteLine("This can be done by launching this application in Visual Studio>Tools>NuGet Package Manager>Updates Tab.");
+                Console.WriteLine("Below are links to the NuGet Packages themselves: \n");
+                Console.WriteLine("https://www.nuget.org/packages/Selenium.WebDriver.ChromeDriver/");
+                Console.WriteLine("https://www.nuget.org/packages/Selenium.WebDriver/ \n");
+                return null;
+            }
+            
             IWebDriver headlessDriver = new ChromeDriver(chromeDriverService, headlessOptions);
+
             WebDriverWait wait = new WebDriverWait(headlessDriver, TimeSpan.FromSeconds(10));
 
             headlessDriver.Navigate().GoToUrl(siteUrl);
